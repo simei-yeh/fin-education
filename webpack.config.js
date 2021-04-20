@@ -1,42 +1,38 @@
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, './src/index.js'),
+  mode: "development",
+  entry: path.join(__dirname, 'client', 'src', 'index.jsx'),
+  output: {
+    path: path.join(__dirname, 'client', 'dist', 'build'),
+    filename: 'bundle.js',
+  },
+  watch: true,
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        test: /\.jsx?$/,
+        include: path.join(__dirname, 'client', 'src'),
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
+            presets: ['@babel/preset-react', '@babel/preset-env'],
           },
         },
       },
       {
         test: /\.css$/i,
         exclude: /node_modules/,
-        use: [
-          'style-loader',
+        use: ['style-loader',
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+              },
             },
-          },
-        ],
+          }],
       },
     ],
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-  },
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'bundle.js',
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, './dist'),
   },
 };
